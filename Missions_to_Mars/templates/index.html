@@ -1,33 +1,97 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Mission to Mars</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-</head>
-
-<body>
-    <div class="container text-center">
-      <h1 class="jumbotron">Mission to Mars</h1>
-      <div>
-        <!-- write a for loop that lists out your data and accesses the values using dot notation. -->
-          {% for item in inventory %}
-          <div class="col-lg-4">
-              <div class="card" style="width: 20rem;">
-                  <div class="card-body">
-                    <h4 class="card-title">{{ item.type }}</h4>
-                    <h6 class="card-subtitle mb-2 text-muted">Cost: {{ item.cost }}</h6>
-                    <p class="card-text">Potential Revenue: {{ item.cost * item.stock}}</p>
-                  </div>
-                </div>
-            </div>
-            {% endfor %}
-
+ <!doctype html>
+ <html lang="en">
+ 
+ <head>
+   <title>Missions to Mars </title>
+   <!-- Required meta tags -->
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+   <!-- Bootstrap CSS -->
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+ </head>
+ 
+ <body>
+   <div class="jumbotron text-center">
+     <h1 class="display-3">Mission to Mars</h1>
+ 
+     <p class="lead">
+       <a class="btn btn-primary btn-lg" href="/scrape" role="button">Mission to Scrape Mars</a></p>
+   </div>
+   <!-- Latest Mars News Section  -->
+   <div class="container">
+ 
+     <div class="row">
+       <div class="col-md-12">
+         <div class="media">
+           <div class="media-body">
+             <h2><b>Latest Mars News</b></h2>
+             <h4 class="heading">{{mars.news_title}}</h4>
+             <p>{{mars.news_p}}</p>
+           </div>
+         </div>
+       </div>
+     </div>
+     <!-- Next div is a row, divided into two sections-->
+     <div class="row" >
+       <!-- First section is for the featured Mars Image -->
+       <div class="col-md-8">
+         <h2>Featured Mars Image</h2>
+         <img src="{{mars.featured_img_url}}" height="600" width="750" class="img-responsive">
+       </div>
+       
+       <!-- Current Mars Weather and Facts -->
+       <div class="col-md-3">
+         <!-- Mars Weather Tweet Row -->
+         <div class="row">
+           <div class="col-md-12">
+             <div class="panel panel-default">
+               <div class="panel-body">
+                 <h4><b>Current Weather on Mars</b></h4>
+                 <p>{{mars.mars_weather}}</p>
+               </div>
+             </div>
+           </div>
+         </div>
+         <!-- Mars Facts Rows -->
+         <div class="row">
+           <div class="col-md-12">
+             <h4><b>Mars Facts</b></h4>
+             {{mars.mars_html|safe}}
+           </div>
+         </div>
+       </div>
+     </div>
+     <br>
+     <div class="container-fluid">
+       <div class="jumbotron">
+         <h1><i class="fa fa-align-center" aria-hidden="true"></i> Mars Hemispheres</h1>
+       </div>
+     </div>
+ 
+     <div class="row">
+      {% for hemisphere in mars.hemisphere_image_urls %}
+      <div class=col-md-6>
+        <div class="card mb-3">
+          <img class= "img-fluid" src="{{ hemisphere.img_url }}" class="card-img-top">
+          <div class="card-body">
+            <h5 class="card-title">{{ hemisphere.title}}</h5>
+          </div>
+        </div>
       </div>
-    </div>
-  </body>
-
+    {% endfor %}
+       </div>
+     </div>
+ 
+   </div>
+   </div>
+   </div>
+   </div>
+   </div>
+ 
+   </div>
+ 
+   </div>
+</body>
 </html>
