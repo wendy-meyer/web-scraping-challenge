@@ -4,12 +4,28 @@ import pandas as pd
 import time
 #import pymongo
 
-mars_data = {}
+#mars_data = {}
 
 def init_browser():
 
     executable_path = {"executable_path": "/usr/local/bin/chromedriver"}
     return Browser("chrome", **executable_path, headless = False)
+
+def scrape_data():
+    browser = init_browser()
+    news_title, news_p = scrape_nasa_info()
+    mars_data = {
+        "title": news_title,
+        "article": news_p,
+        "featured_image_url":scrape_jpl_info(),
+        "mars_weather":scrape_mars_weather(),
+        "mars_html":scrape_mars_facts(),
+        "hemisphere_image_urls":scrape_mars_hemispheres()
+    }
+
+    browser.quit()
+    print(mars_data["featured_image_url"])
+    return mars_data
 
 def scrape_nasa_info():
     browser = init_browser()
@@ -25,28 +41,24 @@ def scrape_nasa_info():
     news_title = article.find('div', class_="content_title").find('a').text
     news_p = article.find('div',class_="article_teaser_body").text
     
-    nasa_data = {"news_title":news_title,
-                "news_p":news_p}
-    browser.quit()
-    
-    mars_data["nasa_data"]=nasa_data
-    return nasa_data
+    return news_title, news_p
 
 def scrape_jpl_info():
     browser = init_browser()
     
     url = "https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars" 
+    new_url = "https://www.jpl.nasa.gov"
     browser.visit(url)
 
     html = browser.html
     soup = BeautifulSoup(html, "html.parser")
 
     relative_image_path = soup.find("article", class_="carousel_item").find("footer").find("a")["data-fancybox-href"]
-    featured_image_url = url + relative_image_path
+    featured_image_url = new_url + relative_image_path
     
     browser.quit()
-    
-    mars_data["featured_image_url"] = featured_image_url
+    print(featured_image_url)
+    #mars_data["featured_image_url"] = featured_image_url
     return featured_image_url
 
 ##INSERT TWITTER WEATHER DATA HERE
@@ -63,7 +75,7 @@ def scrape_mars_weather():
     mars_weather = soup.find('body').find("main").find("article").find_all("span")[4].text
     mars_weather = mars_weather.replace("\n"," ")
 
-    mars_data["mars_weather"] = mars_weather
+    #mars_data["mars_weather"] = mars_weather
     return mars_weather
 
 
@@ -78,7 +90,7 @@ def scrape_mars_facts():
     mars_html = mars_df.to_html()
     mars_html = mars_html.replace('\n', '')
     
-    mars_data["mars_html"] = mars_html
+    #mars_data["mars_html"] = mars_html
     return mars_html
 
 ##Mars Hemispheres
@@ -126,5 +138,5 @@ def scrape_mars_hemispheres():
 
     browser.quit()
     
-    mars_data["hemisphere_image_urls"] = hemisphere_image_urls
+    #mars_data["hemisphere_image_urls"] = hemisphere_image_urls
     return hemisphere_image_urls
